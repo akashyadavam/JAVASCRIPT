@@ -205,13 +205,18 @@
 
 
 
-  let arr=[1,2,3,4];
-//   arr[2]=4//update;
-//   arr.push(7)//add honga 
-//   arr.pop();//akhiri value hat jayegi
-//   arr.shift();//shuru se value first hat jayengi;
+
+
+
+  // let arr=[1,2,3,4];
+  // arr[2]=4//update;
+  // arr.push(7)//add honga 
+  // arr.pop();//akhiri value hat jayegi
+  // arr.shift();//shuru se value first hat jayengi;
 // arr.unshift(0);//shuru mein add kar denga ise 0 ko
-//    arr.splice(2,1)//kaha se hatani hai kitni hatani uske age ka use lekar ye bracket ke nadar pahla aur dusra decide karenge;
+  //  arr.splice(2,1)// bich se value hatayengi//kaha se hatani hai kitni hatani uske age ka use lekar ye bracket ke nadar pahla aur dusra decide karenge; ye slice new arr mein reurn purane arr mein kuch nahi return
+
+
 // let newarr=arr.slice(0,2);//zero se lkra 2-1 index ko apne andar new array bna lega purana array wahi return karenga;
 
 // arr.reverse();//reverse kardenga array ko 
@@ -219,7 +224,12 @@
 
 
 
-// let sr=arr.sort( function(a,b){ nam kuch bhi do a,b ya jon man kare vah do bas name dena pdta hai wah bhi do
+// let sr=arr.sort( function(a,b){
+// //  nam kuch bhi do a,b ya jon man kare vah do bas name dena pdta hai wah bhi do
 //     return a-b// //ascending milega
 //     return b-a //descending
 // });
+
+
+
+// scrollTo,map,foreach 

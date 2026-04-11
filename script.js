@@ -146,61 +146,49 @@
 // }
 // abcd()();
 
+// FN STATEMENT EXPRESION ARROW DEKH LO 
+
+// let multi=(a,b) =>{ arrow 
+//   console.log(a*b);
+// }
+
+// let multi=function(a,b){//expression
+//   console.log(a*b);
+// }
+// function multi(a,b){
+//    console.log(a*b);
+
+// }
+// multi(1,2);
 
 
 
+// jab argument nahi diya lekin parameter le rahe hai to undefined honga hai ya phir parameter ko kuch value de do tab undefined nahi ayenga
+
+// function getscore(...score){
+//   let total=0;
+//   score.forEach(function (val){//bari bari krke sari value ko lekar total return kar denga;
+//     total=total+val;
+//   });
+//   return total;
+// }
+// console.log(getscore(10,20,30,40));
+
+// function outer(){
+//   let count=0;//return wale fn mein ye variable use hua isi ko closer kahte hain
+//   return function(){
+//     count++;
+//     console.log(count);
+//   }
+
+// }
+// const counter=outer();
+// counter();
+// counter();
+   
 
 
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// loop ke aur fn ke questions solve kro jyada se jayda gpt
 
 
 

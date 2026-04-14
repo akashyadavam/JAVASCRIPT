@@ -193,21 +193,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   let arr=[1,2,3,4];
   // arr[2]=4//update;
   // arr.push(7)//add honga 
@@ -264,23 +249,96 @@
 
 
 // let va=arr.find(function(val){
-//   return val===40;//agar val equal hua array wale elemnt se to wah elemnt return hokar store ho jayenga variable mein 
+//   return val===40;//agar val equal hua array wale elemnt se to wah elemnt return hokar store ho jayenga variable mein  pahla banda milega jo 40 ke eual hain
 // })
 
 
 
 // let a=arr.some(function(val){
-//   return val>2;//kyo banda hai 2 se bada to true 
+//   return val>2;//koi banda hai 2 se bada to true koi bhi element true flse mein answer milenga;
 // });
+
+
 
 // let a=arr.every(function(val){
-//   return val>0;//sare elemt agar 0 se bada tab true return hokar a mein stor ek bhi vhota to false hi milenga
-// });
+//   return val>0;//sare elemt agar 0 se bada tab true return hokar a mein stor ek bhi chota to false hi milenga
+// });ye bhi true false mein answer dete hain
 
 
-let[a,b,,c]=arr;//destructuring
-// let arr2=arr;//reference copy
-  let arr2=[...arr];
+// let[a,b,,c]=arr;//destructuring
+// // let arr2=arr;//reference copy
+//   let arr2=[...arr];
 // spred operator ...arr ka matlab sariarr ke elemnt uthao uso spread kr do square bracket mein
+let a=[1,2,3];
+a=[0,...a];
 
- 
+// let color=["greet"];
+// color.splice(1,0,"red","blue")//1 index 0 hatana ek bhi hatana nahi age jo bheja us location ke age ye pass ho jayenge 
+
+//  let name=["ak","am","ma","sum","golu","pro","khu"];
+//  name.sort().reverse();
+
+
+
+//  let obj={
+//   name:"akash",
+//   age:20,
+//  }
+// let aa="name";
+// obj.aa//yahi name dhuda jayenga obj mein jo ki hai nahi
+// obj[aa];//ab acess ab aa covert name mein ho jayega  variable name likhe hai aa ye convert ho jayenag
+//  console.log(obj.age);//dot ke bad jo likheneg wah variable dhuda jayenga
+//  console.log(obj['age']);//square bracket ke andar jab likhe to ' ' iska used kare variable ka name likhne mein
+
+//  let user={
+//   name:"ak",
+//   adress:{
+//     city:"jnp",
+//     pincode:222161,
+//     locations:{
+//       lat:13,
+//       long:12,
+//     }
+
+//   }
+
+//  }
+//  let{lat,long}=user.adress.locations;
+//  console.log(lat)
+
+// let obj={
+//   name:"ak",//key value left side aur col ke rigth side wala structured;
+//   age:20,
+
+// }
+// for(let key in obj){//key ek variable hai jaiske value change hogi
+//   //console.log(obj.key);//
+//   console.log(key,obj[key])
+// }
+
+// Object.key(obj);
+// Object.entries(obj);
+
+
+
+let obj={
+  name:"ak",
+  adress:{
+    city:"jnp",
+    pincode:222161,
+    locations:{
+      lat:13,
+      long:12,
+    },
+  },
+};
+// let obj2=Object.assign({price:"infinity"},obj);
+
+// obj2={...obj}
+// obj2.adress.city="gkp";
+//ab obj ka city gkp bn gay due to nested andar ke nested objected reference copy hone lgta hain bhale hi spread hi kyon na ue kiye ho to isase bachne ke liye deep copy kareneg
+
+// let obj2=JSON.parse(JSON.stringify(obj))//stringfy krne sare string ka part reality mein parse ke dwara copy ban jayega
+// obj2.adress.city="gkp"
+
+

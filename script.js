@@ -208,7 +208,7 @@
 
 
 
-  // let arr=[1,2,3,4];
+  let arr=[1,2,3,4];
   // arr[2]=4//update;
   // arr.push(7)//add honga 
   // arr.pop();//akhiri value hat jayegi
@@ -233,3 +233,54 @@
 
 
 // scrollTo,map,foreach 
+
+
+// arr.forEach(function(val){
+//   console.log(val);
+
+// })
+
+
+
+
+//map ssrf tab use karna hai jab apko new array bnana hai pichle array ke data bases pr map dikhte man mein blank arr banao
+//  let ans=arr.map(function(val){
+//   return 12;
+// })//save krna pdta hai let mein map ko 
+// agar return nahi karenge retunt to undefined ayenga
+
+
+
+//  let sr=arr.filter(function(val){
+  // return false; 
+// })
+
+
+
+// let ar=arr.reduce(function(accumulator,val){
+//   return accumulator+val;
+// },0);
+//bari bari karke arrray ke lement ka sum karke acccumulator meindenga intial accumulator 0 initallise kiya tha
+
+
+// let va=arr.find(function(val){
+//   return val===40;//agar val equal hua array wale elemnt se to wah elemnt return hokar store ho jayenga variable mein 
+// })
+
+
+
+// let a=arr.some(function(val){
+//   return val>2;//kyo banda hai 2 se bada to true 
+// });
+
+// let a=arr.every(function(val){
+//   return val>0;//sare elemt agar 0 se bada tab true return hokar a mein stor ek bhi vhota to false hi milenga
+// });
+
+
+let[a,b,,c]=arr;//destructuring
+// let arr2=arr;//reference copy
+  let arr2=[...arr];
+// spred operator ...arr ka matlab sariarr ke elemnt uthao uso spread kr do square bracket mein
+
+ 

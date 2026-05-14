@@ -1,0 +1,421 @@
+## Understanding JavaScript Execution Context and Call Stack
+
+### Execution Context: The Core of JavaScript Runtime
+
+- **Execution Context (EC)**: The environment where JavaScript code is executed. Every JS program runs inside an execution context.
+- **Global Execution Context (GEC)**: When a JavaScript program starts, the global execution context is created first. It contains two key components:
+  - **Memory Component**: Stores variables and functions.
+  - **Code Component**: Executes the code line by line.
+
+### Two Phases of Execution Context Creation
+
+| Phase                  | Description                                                                                       | Key Details                                                             |
+|------------------------|-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------|
+| **1. Memory Creation** | JS scans the entire code, allocates memory for variables and functions.                          | - Variables are set to `undefined` initially (special placeholder).<br>- Functions store the entire function code in memory. |
+| **2. Code Execution**  | JS executes the code line by line, updating variable values and calling functions as encountered. | - Variables get their actual values.<br>- Functions are invoked, creating new execution contexts. |
+
+### Example Walkthrough: Function Invocation and Execution
+
+- Code snippet:
+  ```javascript
+  let n = 2;
+  function square(num) {
+    let ans = num * num;
+    return ans;
+  }
+  let square2 = square(n);
+  let square4 = square(square2);
+  ```
+
+- **Global Execution Context Phase 1**:
+  - `n` allocated memory with value `undefined`.
+  - `square` function allocated memory with full function code.
+  - `square2` and `square4` variables allocated with `undefined`.
+
+- **Global Execution Context Phase 2**:
+  - `n` assigned value `2`.
+  - Function `square` is invoked with argument `n` (2), triggering a **new execution context**.
+
+- **Function Execution Context (for `square(2)`)**:
+  - Phase 1: Allocate memory for parameters `num` and local `ans` with `undefined`.
+  - Phase 2: Assign `num = 2`, calculate `ans = 2 * 2 = 4`.
+  - Return `ans` (4) to the caller; execution context is destroyed.
+
+- `square2` now holds the value `4`.
+
+- **Next function call `square(square2)`**:
+  - Similar steps repeat:
+  - New execution context created with argument `4`.
+  - `ans = 4 * 4 = 16`.
+  - Return `16`, assign to `square4`.
+  - Execution context destroyed after return.
+
+### Execution Context Lifecycle
+
+- Each function invocation creates a **new execution context** with its own memory and code components.
+- After function completes and returns, its execution context is **deleted**.
+- Execution contexts can be nested if functions invoke other functions.
+
+### Call Stack: Managing Execution Contexts
+
+- JavaScript uses a **Call Stack** data structure to manage execution contexts.
+- **Call Stack Behavior**:
+  - The global execution context is pushed onto the stack first.
+  - Each function invocation pushes a new execution context on top.
+  - After function finishes, its execution context is popped off.
+  - Control returns to the previous execution context (below in stack).
+  
+- This stack ensures execution order and proper management of nested function calls.
+
+| Term            | Explanation                                             |
+|-----------------|---------------------------------------------------------|
+| **Call Stack**  | Stack data structure managing execution contexts order. |
+| **Push**        | Adding a new execution context when a function runs.    |
+| **Pop**         | Removing execution context after function returns.      |
+| **Global Context** | Bottom of the stack, the first execution context.       |
+
+- The call stack is also known by other names such as:
+  - Execution Context Stack
+  - Program Stack
+  - Control Stack
+  - Runtime Stack
+  - Machine Stack
+
+### Summary & Key Takeaways
+
+- JavaScript code runs inside **execution contexts**, primarily the global context and function contexts.
+- Execution contexts are created in **two phases**: memory allocation (variables/functions set to undefined or function code) and code execution (actual value assignment and function invocation).
+- Each function invocation creates a **new execution context**, which is destroyed after the function returns.
+- The **call stack** manages execution contexts in a last-in-first-out (LIFO) order, maintaining the execution flow and handling nested function calls efficiently.
+- Variables initially hold `undefined` during memory allocation phase, highlighting JavaScript's hoisting behavior.
+- Understanding execution contexts and call stack is essential to grasp JavaScript’s runtime behavior, function invocation, and recursion.
+- Despite the complexity, JavaScript engine manages these processes seamlessly behind the scenes.
+
+This explanation builds a comprehensive foundation for JavaScript's execution model and prepares learners to dive deeper into advanced topics like closures, hoisting, and asynchronous behavior.
+
+
+
+
+## Understanding Hoisting and Execution Context in JavaScript
+
+### Core Concept: Hoisting
+- **Hoisting** is a JavaScript behavior where **variable and function declarations are moved to the top of their containing scope during the compilation phase**, before code execution.
+- This allows **accessing variables and functions before their actual declaration lines in the source code** without immediately throwing errors.
+
+### Behavior Differences Between Variables and Functions
+| Entity Type               | Initial Value During Hoisting       | Console Output if Accessed Before Declaration                  | Explanation                                                    |
+|---------------------------|------------------------------------|-----------------------------------------------------------------|----------------------------------------------------------------|
+| Function Declaration      | Entire function stored in memory   | Prints the function code or executes correctly if invoked early | Function declarations are fully hoisted with their body.       |
+| Variable Declaration (`var`) | `undefined` placeholder assigned   | Prints `undefined`                                               | Variables get memory allocated but with value `undefined`.     |
+| Variable Declaration (`let`/`const`) | Not hoisted or in Temporal Dead Zone | Throws ReferenceError: not defined                              | `let` and `const` are hoisted differently and cannot be accessed before initialization. |
+| Function Expression (including arrow functions assigned to variables) | `undefined` placeholder | Throws TypeError when invoked early ("not a function")          | Treated as variables; only the variable declaration is hoisted, not the function itself. |
+
+### Key Differences Between `undefined` and `not defined`
+- **`undefined`** means the variable exists in memory but has no assigned value yet.
+- **`ReferenceError: not defined`** means the variable was never declared or initialized in scope and thus no memory was allocated.
+
+### How Hoisting Works Internally
+- JavaScript creates an **Execution Context** for running code, which has two phases:
+  1. **Memory Allocation Phase (Creation Phase)**:  
+     - Memory is allocated for all variables and functions.
+     - Functions are stored entirely with their definitions.
+     - Variables declared with `var` get a placeholder value `undefined`.
+  2. **Code Execution Phase**:  
+     - Code runs line-by-line, and variables/functions get their assigned values.
+- This explains why functions can be called before their declaration, and variables are `undefined` if accessed early.
+
+### Demonstration with Debugger
+- Using browser dev tools, you can observe during the **creation phase**:
+  - Variables like `x` are set to `undefined` in memory.
+  - Function declarations are fully available with their code in memory.
+- During execution:
+  - Function calls push their execution context onto the **call stack**.
+  - After function execution, their context is popped off, returning control to the previous context.
+
+### Call Stack and Execution Context
+- **Call Stack** manages active execution contexts.
+- The **global execution context** is created first and lies at the bottom.
+- When a function is invoked, a new execution context is created and pushed on top.
+- After the function finishes, its execution context is removed (popped) from the stack.
+- This stack mechanism controls the flow of function calls and returns.
+
+### Arrow Functions and Function Expressions
+- Arrow functions or functions assigned to variables behave like variables in hoisting:
+  - Only the variable declaration is hoisted (assigned `undefined` initially).
+  - Trying to invoke before assignment results in a **TypeError** ("not a function").
+- This contrasts with traditional function declarations which are hoisted with their full definitions.
+
+---
+
+## Summary & Key Takeaways
+
+- **Hoisting** is a compile-time behavior where JavaScript allocates memory for variables and functions before execution.
+- Traditional **function declarations** are fully hoisted; accessible and callable before their declaration line.
+- Variables declared with `var` are hoisted but initialized as `undefined`.
+- Variables declared with `let` or `const` cause a **Temporal Dead Zone** and throw errors if accessed before initialization.
+- **Function expressions** and **arrow functions** are treated like variables during hoisting, causing errors if invoked too early.
+- The **Execution Context** has two phases: creation (hoisting) and execution.
+- The **Call Stack** manages the order of function calls and returns.
+- Understanding these concepts is crucial for mastering JavaScript's runtime behavior, debugging, and writing predictable code.
+
+This knowledge is essential for interviews and deep JavaScript comprehension, moving beyond the simplistic notion that JavaScript "moves code to the top." Instead, it’s about how the engine prepares memory and contexts internally before executing your code.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Understanding Function Invocation and Variable Environment in JavaScript
+
+This explanation delves into how JavaScript handles **function invocation**, **variable environments**, and **execution contexts**, illustrating these concepts with a detailed example involving functions and variables with the same name in different scopes.
+
+---
+
+### Core Concepts
+
+- **Execution Context**: An abstract environment where JavaScript code is evaluated and executed. It has two main components:
+  - **Memory (Variable Environment)**: Where variables and functions are stored.
+  - **Code**: The actual code to execute.
+
+- **Global Execution Context**: Created when the program starts; contains global variables and functions.
+
+- **Function Execution Context**: Created every time a function is invoked; local to that function.
+
+- **Call Stack**: A stack data structure that manages execution contexts. The global context is pushed first; function contexts are pushed and popped as functions are called and completed.
+
+- **Hoisting**: JavaScript behavior where variable and function declarations are moved to the top of their scope before code execution.
+
+---
+
+### Detailed Walkthrough of the Example
+
+The example involves:
+
+- A global variable `x = 1`.
+- Two functions `a()` and `b()`, each with their own local variable `x` (`x = 10` in `a()`, `x = 100` in `b()`).
+- Logging the value of `x` at various points to observe scope behavior.
+
+---
+
+### Step-by-Step Execution Phases
+
+| Phase                  | Details                                                                                          |
+|------------------------|------------------------------------------------------------------------------------------------|
+| **1. Global Execution Context Creation** | Memory allocated for `x`, `a`, and `b`. `x` initialized as `undefined`, `a` and `b` point to function code. Pushed onto call stack. |
+| **2. Global Code Execution Begins**      | `x` is assigned value `1`, replacing `undefined`.                                             |
+| **3. Function `a()` Invocation**         | New execution context created for `a`. Local memory allocates `x` as `undefined`. Context pushed onto call stack. |
+| **4. `a()` Execution**                    | `x` in `a` assigned `10`. Console logs `10` by looking up local `x`. Execution context popped off after completion. |
+| **5. Function `b()` Invocation**         | New execution context created for `b`. Local memory allocates `x` as `undefined`. Context pushed onto call stack. |
+| **6. `b()` Execution**                    | `x` in `b` assigned `100`. Console logs `100`. Execution context popped off after completion. |
+| **7. Final Global `console.log(x)`**     | Global `x` remains `1`. Console logs `1`.                                                      |
+| **8. Program Completion**                 | Global execution context popped off the call stack.                                          |
+
+---
+
+### Key Insights and Relationships
+
+- **Separate Variable Environments:** Each function invocation creates an independent execution context with its own local variables, even if variable names overlap with global or other local variables.
+
+- **Variable Shadowing:** Local variables with the same name as global variables shadow the global ones within their execution context.
+
+- **Call Stack Management:** Execution contexts are pushed on the call stack when functions are invoked and popped off once execution completes, maintaining the order of execution.
+
+- **Memory Allocation in Two Phases:**
+  - **Memory Creation Phase:** Variables are allocated memory and initialized to `undefined` before code execution.
+  - **Code Execution Phase:** Variables are assigned actual values as the code runs.
+
+- **Console Logging Behavior:** When logging a variable, JavaScript searches for the variable in the current execution context’s memory (starting local, then outer scopes if applicable).
+
+---
+
+### Visualization of Call Stack and Memory
+
+| Call Stack (Top to Bottom) | Description                             | Variable Environment Content                      |
+|----------------------------|-------------------------------------|-------------------------------------------------|
+| Empty                      | After program finishes execution     | No active variables or functions                 |
+| Global Execution Context    | The base context for all code        | `x` = 1, `a` and `b` point to function code     |
+| Function `b()` Context      | Active during `b()` execution         | Local `x` = 100                                  |
+| Function `a()` Context      | Active during `a()` execution         | Local `x` = 10                                   |
+
+---
+
+### Practical Demonstration Using Debugger
+
+- Usage of debugger statements confirms the creation and destruction of execution contexts.
+- Observing local memory during function execution shows local `x` as `undefined` initially, then updated with assigned values.
+- Console outputs align perfectly with the local values, demonstrating scope isolation.
+
+---
+
+### Importance for Advanced Concepts
+
+- Understanding these mechanics is foundational for **scope**, **closures**, and **execution order** in JavaScript.
+- This knowledge clarifies why variables inside functions do not interfere with global variables of the same name.
+- The process of pushing and popping execution contexts explains asynchronous behavior and stack overflow errors.
+
+---
+
+### Summary & Key Takeaways
+
+- JavaScript manages code execution via **execution contexts** with isolated **variable environments**.
+- Each function call creates a new execution context with its own local variables, independent of the global context or other functions.
+- Variables are hoisted and initialized as `undefined` before execution.
+- The **call stack** tracks execution contexts, pushing on function calls and popping after completion.
+- Console logs within functions print local variables; outside functions, they print global variables.
+- This execution model is crucial for understanding scope, closures, and debugging JavaScript programs effectively.
+
+
+
+
+
+
+## Understanding the Global Object and Window in JavaScript
+
+### Core Concepts
+
+- **Global Object**: In JavaScript, the global object serves as the top-level container for all global variables and functions. It varies depending on the environment:
+  - In **browsers**, the global object is the **`window`** object.
+  - In other environments (like Node.js), a different global object exists.
+  
+- **Window Object**:
+  - Represents the global context in browsers.
+  - Contains properties, methods, and events related to the browser window.
+  - Acts as the global object, meaning global variables and functions become properties and methods of `window`.
+
+- **JavaScript Environment Specifics**:
+  - JavaScript runs differently depending on the browser (e.g., Chrome, Firefox, Safari).
+  - Each browser is responsible for creating this global object (`window` in browsers).
+  - Despite differences, the concept of a global object remains consistent.
+
+### Key Details and Examples
+
+| Concept                     | Explanation                                                         | Example/Detail                                                  |
+|-----------------------------|---------------------------------------------------------------------|----------------------------------------------------------------|
+| Global Object Creation       | Automatically created by the JavaScript engine in the environment. | In browsers, this is the `window` object.                      |
+| Accessing Globals            | Global variables/functions are accessible as properties of `window`. | `var x = 5;` is equivalent to `window.x = 5;`                  |
+| Functions Outside Functions  | JavaScript allows creation of functions at the global scope, which become methods of the global object. | Defining a global function `subscribe()` is accessible via `window.subscribe()` |
+| Environment Dependency       | JavaScript code runs within the context of the host environment.   | Code running in Firefox creates a `window` object specific to that browser. |
+| Subscription Metaphor        | The text uses the idea of "subscribing" to channels or programs metaphorically to explain creating and accessing functions or objects globally. | Encourages subscribing to the channel as a metaphor for global function invocation. |
+
+### Relationship Between Global Object and Window
+
+- The **`window` object is the global object in browsers**.
+- Global variables/functions are implicitly properties/methods of `window`.
+- Scripts can create or access global data through `window`.
+- This provides a unified namespace but requires careful management to avoid conflicts.
+
+### Additional Notes
+
+- The **global object is always present**, whether in browsers or other JavaScript environments.
+- Understanding this helps in managing variable/function scope and avoiding polluting the global namespace.
+- JavaScript's behavior depends on the runtime environment, but the global object concept is universal.
+- The discussion touches on **JavaScript event handling**, **function creation**, and **scope** implicitly through the metaphor of subscribing and programming.
+
+---
+
+### Summary & Key Takeaways
+
+- The **global object** is a fundamental JavaScript concept representing the environment’s global scope.
+- In browsers, this is the **`window` object**, which contains global variables and functions.
+- JavaScript engines in different browsers create and manage this object, ensuring global access to properties.
+- Understanding the global object aids in writing cleaner, more maintainable code by managing scope properly.
+- The metaphor of subscribing to channels/functions illustrates how global functions can be invoked and managed.
+- Always remember that global scope pollution should be minimized by encapsulating code within functions or modules.
+
+
+
+
+## Understanding `undefined` in JavaScript
+
+### Key Concepts of `undefined`
+- **`undefined`** is a *special keyword* unique to JavaScript, representing a placeholder value assigned to variables before they are explicitly initialized.
+- During JavaScript's *global execution context creation*, memory is allocated for all variables and functions **before** running any code lines.
+- Variables that have reserved memory but no assigned value hold the value `undefined`.
+- Accessing a variable that has not been declared at all results in a **ReferenceError** with the term **"not defined"**, which is fundamentally different from being `undefined`.
+
+### Memory Allocation and Execution Flow
+- When a variable (e.g., `a`) is declared but not yet assigned a value, JavaScript internally sets it to `undefined`.
+- Example:
+
+  ```javascript
+  var a;
+  console.log(a); // Outputs: undefined
+  a = 7;
+  console.log(a); // Outputs: 7
+  ```
+
+- Trying to access an undeclared variable (e.g., `x`) will throw a **not defined** error.
+
+### Difference Between `undefined` and `not defined`
+
+| Term          | Meaning                                         | Example                          |
+|---------------|-------------------------------------------------|---------------------------------|
+| `undefined`   | Variable declared & memory allocated, no value  | `var a; console.log(a); // undefined` |
+| `not defined` | Variable not declared or memory not allocated    | `console.log(x); // ReferenceError` |
+
+### `undefined` Is Not the Same as Empty
+- `undefined` is *not* an empty value or `null`.
+- It occupies memory as a placeholder until a proper value is assigned.
+- It signals that a variable exists but has no assigned value yet.
+
+### Checking for `undefined`
+- Variables can be compared using strict equality (`===`) to check if they are `undefined`:
+
+  ```javascript
+  if (a === undefined) {
+    console.log("a is undefined");
+  } else {
+    console.log("a is defined");
+  }
+  ```
+
+### JavaScript as a Loosely Typed Language
+- JavaScript variables **do not have fixed data types**.
+- Variables can hold any type of value at different points in the program:
+
+  ```javascript
+  var a;
+  console.log(a); // undefined
+  a = 10;
+  console.log(a); // 10
+  a = "hello world";
+  console.log(a); // "hello world"
+  ```
+
+- This flexibility is why JavaScript is called a **loosely typed** or **weakly typed** language.
+- This does *not* mean JavaScript is weak; it manages type coercion and flexibility behind the scenes, making it powerful and adaptable.
+
+### Best Practices Regarding `undefined`
+- **Do not manually assign `undefined` to variables.**
+- Although JavaScript allows `a = undefined`, this practice is discouraged because:
+  - `undefined` is intended as a system placeholder indicating "no value assigned."
+  - Manual assignment can cause confusion and inconsistencies in code.
+- Let `undefined` naturally represent uninitialized variables for clarity and maintainability.
+
+---
+
+### Summary & Key Takeaways
+
+- `undefined` is a *special placeholder value* automatically assigned to declared but uninitialized variables in JavaScript.
+- Accessing undeclared variables results in a **not defined** error, which differs fundamentally from `undefined`.
+- JavaScript allocates memory for all variables upfront during the global execution context creation.
+- JavaScript’s *loosely typed* nature allows variables to hold values of any type dynamically.
+- Avoid assigning `undefined` manually to variables to prevent confusion; rely on JavaScript's natural handling of `undefined`.
+- Use strict equality (`===`) to check if a variable is `undefined`.
+- Understanding `undefined` is foundational for grasping JavaScript’s execution model and variable behavior.
+
+
+
+
+
+
+
+

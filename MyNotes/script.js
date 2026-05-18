@@ -165,3 +165,10 @@
 
 
 
+// Closure technically:
+// hamesha create hota hai
+
+// BUT…
+
+// Agar function outer scope se bahar survive hi nahi karta,
+// to closure useful nahi dikhta.
